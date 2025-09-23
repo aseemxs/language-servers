@@ -43,7 +43,7 @@ describe('Test CachedContentHandler', async () => {
 
     beforeEach(async () => {
         mockfs({
-            '//cache': {
+            'cache': {
                 cachedUris: {
                     metadata: '{}',
                 },
@@ -54,7 +54,7 @@ describe('Test CachedContentHandler', async () => {
         timeProviderStub = stub(new TimeProvider())
         timeProviderStub.currentMilliseconds.returns(currentTimeMs)
 
-        cacheRepository = new UriCacheRepository('//cache', timeProviderStub)
+        cacheRepository = new UriCacheRepository('cache', timeProviderStub)
         sut = new CachedContentHandler({
             cacheRepository,
             timeProvider: timeProviderStub,
@@ -71,8 +71,7 @@ describe('Test CachedContentHandler', async () => {
         expect(response.content).to.equal('foo')
     })
 
-    const testFn1 = process.version.startsWith('v24.') ? it.skip : it
-    testFn1('requests content when there is no cache', async () => {
+    it('requests content when there is no cache', async () => {
         const response = await sut.get(sampleUri, createDelegateReturning('hello', 'hello-tag'))
         expect(response.content).to.equal('hello')
 
@@ -82,8 +81,7 @@ describe('Test CachedContentHandler', async () => {
         expect(cacheMetadata?.eTag).to.equal('hello-tag')
     })
 
-    const testFn2 = process.version.startsWith('v24.') ? it.skip : it
-    testFn2('requests content when the cache is stale', async () => {
+    it('requests content when the cache is stale', async () => {
         const response = await sut.get(sampleUri, createDelegateReturning('hello', 'hello-tag'))
         expect(response.content).to.equal('hello')
 
@@ -101,8 +99,7 @@ describe('Test CachedContentHandler', async () => {
         expect(cacheMetadata?.eTag).to.equal('world-tag')
     })
 
-    const testFn3 = process.version.startsWith('v24.') ? it.skip : it
-    testFn3('requests content when a different version is online', async () => {
+    it('requests content when a different version is online', async () => {
         requester.respondWith('hello', 'hello-tag')
         const response = await sut.get(sampleUri, createDelegateReturning('hello', 'hello-tag'))
         expect(response.content).to.equal('hello')
