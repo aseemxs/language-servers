@@ -30,7 +30,7 @@ describe('Test UriCacheRepository', async () => {
         timeProviderStub = stub(new TimeProvider())
         timeProviderStub.currentMilliseconds.returns(currentTimeMs)
 
-        sut = new UriCacheRepository('//cache', timeProviderStub)
+        sut = new UriCacheRepository('/cache', timeProviderStub)
     })
 
     afterEach(async () => {
